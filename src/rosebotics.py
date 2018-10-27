@@ -109,6 +109,14 @@ class DriveSystem(object):
         # TODO:   from wheel-degrees-spun to robot-inches-moved.
         # TODO:   Assume that the conversion is linear with respect to speed.
 
+        degrees1 = self.left_wheel.get_degrees_spun()
+        while True:
+            self.left_wheel.start_spinning(duty_cycle_percent)
+            self.right_wheel.start_spinning(duty_cycle_percent)
+            if self.left_wheel.get_degrees_spun() - degrees1 > inches*89:
+                self.stop_moving(stop_action)
+                break
+
     def spin_in_place_degrees(self,
                               degrees,
                               duty_cycle_percent=100,
@@ -122,6 +130,14 @@ class DriveSystem(object):
         # TODO: Do a few experiments to determine the constant that converts
         # TODO:   from wheel-degrees-spun to robot-degrees-spun.
         # TODO:   Assume that the conversion is linear with respect to speed.
+
+        self.right_wheel.reset_degrees_spun()
+        self.right_wheel.start_spinning(duty_cycle_percent)
+        self.left_wheel.start_spinning(-1 * duty_cycle_percent)
+        while True:
+            if self.right_wheel.get_degrees_spun() >= degrees * 10:
+                self.stop_moving(stop_action)
+
     def turn_degrees(self,
                      degrees,
                      duty_cycle_percent=100,
@@ -181,10 +197,16 @@ class TouchSensor(rb.TouchSensor):
     def wait_until_pressed(self):
         """ Waits (doing nothing new) until the touch sensor is pressed. """
         # TODO.
+        while True:
+            if self.get_value() == 1:
+                break
 
     def wait_until_released(self):
         """ Waits (doing nothing new) until the touch sensor is released. """
         # TODO
+        while True:
+            if self.get_value() == 0:
+                break
 
 
 class Camera(object):
@@ -204,6 +226,9 @@ class ColorSensor(rb.ColorSensor):
         be between 0 (no light reflected) and 100 (maximum light reflected).
         """
         # TODO.
+        while True:
+            if self.get_value() < reflected_light_intensity:
+                break
 
     def wait_until_intensity_is_greater_than(self, reflected_light_intensity):
         """
@@ -212,6 +237,9 @@ class ColorSensor(rb.ColorSensor):
         should be between 0 (no light reflected) and 100 (max light reflected).
         """
         # TODO.
+        while True:
+            if self.get_value() > reflected_light_intensity:
+                break
 
     def wait_until_color_is(self, color):
         """
@@ -220,6 +248,9 @@ class ColorSensor(rb.ColorSensor):
         The given color must be a Color (as defined above).
         """
         # TODO.
+        while True:
+            if self.get_color() == color:
+                break
 
     def wait_until_color_is_one_of(self, colors):
         """
@@ -228,6 +259,10 @@ class ColorSensor(rb.ColorSensor):
         Each item in the sequence must be a Color (as defined above).
         """
         # TODO.
+        while True:
+            for i in range(len(colors)):
+                if self.get_color() == colors[i]:
+                    break
 
 
 class InfraredSensorAsProximitySensor(object):
