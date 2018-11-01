@@ -217,6 +217,15 @@ class DriveSystem(object):
         # TODO: Don't forget that the Wheel object's position begins wherever
         # TODO:   it last was, not necessarily 0.
 
+        degrees1 = self.left_wheel.get_degrees_spun()
+        while True:
+            self.left_wheel.start_spinning(duty_cycle_percent)
+            self.right_wheel.start_spinning(duty_cycle_percent)
+            if self.left_wheel.get_degrees_spun() - degrees1 > inches * 89:
+                self.stop_moving(stop_action)
+                break
+
+
     def spin_in_place_degrees(self,
                               degrees,
                               duty_cycle_percent=100,
@@ -235,6 +244,13 @@ class DriveSystem(object):
         # TODO:   Assume that the conversion is linear with respect to speed.
         # TODO: Don't forget that the Wheel object's position begins wherever
         # TODO:   it last was, not necessarily 0.
+        self.right_wheel.reset_degrees_spun()
+        self.right_wheel.start_spinning(duty_cycle_percent)
+        self.left_wheel.start_spinning(-1 * duty_cycle_percent)
+        while True:
+            if self.right_wheel.get_degrees_spun() >= degrees * 5.5:
+                self.stop_moving(stop_action)
+                break
 
     def turn_degrees(self,
                      degrees,
@@ -255,6 +271,20 @@ class DriveSystem(object):
         # TODO: Don't forget that the Wheel object's position begins wherever
         # TODO:   it last was, not necessarily 0.
 
+        if degrees > 0:
+            self.right_wheel.start_spinning(duty_cycle_percent)
+            while True:
+                if self.right_wheel.get_degrees_spun() >= degrees * 11:
+                    self.stop_moving(stop_action)
+                    break
+        if degrees < 0:
+            degrees = degrees * -1
+            self.left_wheel.start_spinning(duty_cycle_percent)
+            while True:
+                if self.left_wheel.get_degrees_spun() >= degrees * 11:
+                    self.stop_moving(stop_action)
+                    break
+
 
 class TouchSensor(low_level_rb.TouchSensor):
     """
@@ -273,10 +303,16 @@ class TouchSensor(low_level_rb.TouchSensor):
     def wait_until_pressed(self):
         """ Waits (doing nothing new) until the touch sensor is pressed. """
         # TODO.
+        while True:
+            if self.get_value() == 1:
+                break
 
     def wait_until_released(self):
         """ Waits (doing nothing new) until the touch sensor is released. """
         # TODO
+        while True:
+            if self.get_value() == 0:
+                break
 
 
 class ColorSensor(low_level_rb.ColorSensor):
