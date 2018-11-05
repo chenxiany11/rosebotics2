@@ -264,11 +264,11 @@ class DriveSystem(object):
         "Turning" means that both ONE wheel spins at the given speed and the
         other wheel does NOT spin.
         """
-        # TODO: Use the Wheel object's   get_degrees_spun   method.
-        # TODO: Do a few experiments to determine the constant that converts
-        # TODO:   from WHEEL-degrees-SPUN to ROBOT-degrees-TURNED.
-        # TODO:   Assume that the conversion is linear with respect to speed.
-        # TODO: Don't forget that the Wheel object's position begins wherever
+        # done: Use the Wheel object's   get_degrees_spun   method.
+        # done: Do a few experiments to determine the constant that converts
+        # done:   from WHEEL-degrees-SPUN to ROBOT-degrees-TURNED.
+        # done:   Assume that the conversion is linear with respect to speed.
+        # done: Don't forget that the Wheel object's position begins wherever
         # TODO:   it last was, not necessarily 0.
 
         if degrees > 0:
@@ -302,14 +302,14 @@ class TouchSensor(low_level_rb.TouchSensor):
 
     def wait_until_pressed(self):
         """ Waits (doing nothing new) until the touch sensor is pressed. """
-        # TODO.
+        # done.
         while True:
             if self.get_value() == 1:
                 break
 
     def wait_until_released(self):
         """ Waits (doing nothing new) until the touch sensor is released. """
-        # TODO
+        # done
         while True:
             if self.get_value() == 0:
                 break
@@ -368,7 +368,7 @@ class ColorSensor(low_level_rb.ColorSensor):
         light intensity is less than the given value (threshold), which should
         be between 0 (no light reflected) and 100 (maximum light reflected).
         """
-        # TODO.
+        # done.
         while True:
             if self.get_value() < reflected_light_intensity:
                 break
@@ -379,7 +379,7 @@ class ColorSensor(low_level_rb.ColorSensor):
         light intensity is greater than the given value (threshold), which
         should be between 0 (no light reflected) and 100 (max light reflected).
         """
-        # TODO.
+        # done.
         while True:
             if self.get_value() > reflected_light_intensity:
                 break
@@ -390,7 +390,7 @@ class ColorSensor(low_level_rb.ColorSensor):
         of what color it sees is the given color.
         The given color must be a Color (as defined above).
         """
-        # TODO.
+        # dne.
         while True:
             if self.get_color() == color:
                 break
@@ -401,7 +401,7 @@ class ColorSensor(low_level_rb.ColorSensor):
         of what color it sees is any one of the given sequence of colors.
         Each item in the sequence must be a Color (as defined above).
         """
-        # TODO.
+        # done.
         while True:
             for i in range(len(colors)):
                 if self.get_color() == colors[i]:
