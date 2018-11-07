@@ -15,11 +15,11 @@ def main():
 
 def run_tests():
     """ Runs various tests. """
-    # run_test_ir()
-    run_test_drive_system()
+    run_test_ir()
+    # run_test_drive_system()
     # run_test_touch_sensor()
     # run_test_color_sensor()
-    run_test_arm()
+    # run_test_arm()
 
 
 def run_test_arm():
@@ -32,8 +32,9 @@ def run_test_arm():
 
 
 def run_test_ir():
+    print('help me')
     robot = rb.Snatch3rRobot()
-
+    print('save me')
     while True:
         # TODO: Print the value of the following, one at a time. For each,
         # TODO:   do the appropriate user actions (e.g. try pressing a button
@@ -49,7 +50,9 @@ def run_test_ir():
               robot.beacon_button_sensor.is_top_blue_button_pressed(),
               robot.beacon_button_sensor.is_bottom_red_button_pressed(),
               robot.beacon_button_sensor.is_top_blue_button_pressed(),
-              robot.beacon_button_sensor.is_bottom_blue_button_pressed())
+              robot.beacon_button_sensor.is_bottom_blue_button_pressed(),
+              robot.beacon_button_sensor.get_distance_to_beason(),
+              robot.beacon_button_sensor.get_heading_to_beason())
 
         character = input(
             "Press the ENTER (return) key to continue, or q to quit: ")
