@@ -2,13 +2,13 @@
   Capstone Project.
   This module contains high-level, general-purpose methods for a Snatch3r robot.
 
-  Team members:  PUT_YOUR_NAMES_HERE.
+  Team members:  Rachel Zhang, Sybil Chen.
   Fall term, 2018-2019.
 """
-# TODO: Put your names in the above.
-# TODO: Do the TODO's below.
-# TODO: Augment this module as appropriate, being sure to always
-# TODO:   ** coordinate with your teammates ** in doing so.
+# DONE: Put your names in the above.
+# DONE: Do the T'ODO's below.
+# DONE: Augment this module as appropriate, being sure to always
+# DONE:   ** coordinate with your teammates ** in doing so.
 
 from ev3dev import ev3
 from enum import Enum
@@ -132,8 +132,8 @@ class Snatch3rRobot(object):
         self.color_sensor = ColorSensor(color_sensor_port)
         self.camera = Camera(camera_port)
 
-        self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
-        self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
+        # self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
+        # self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
         self.beacon_button_sensor = InfraredAsBeaconButtonSensor(channel=1)
 
         self.brick_button_sensor = BrickButtonSensor()
@@ -146,10 +146,10 @@ class DriveSystem(object):
     """
     A class for driving (moving) the robot.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-       their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+       their colleagues, the entire team, and Rachel Zhang, Sybil Chen.
     """
 
-    # TODO: In the above line, put the name of the primary author of this class.
+    # DONE: In the above line, put the name of the primary author of this class.
 
     def __init__(self,
                  left_wheel_port=ev3.OUTPUT_B,
@@ -289,7 +289,7 @@ class TouchSensor(low_level_rb.TouchSensor):
     """
     A class for an EV3 touch sensor.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-       their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+       their colleagues, the entire team, and Rachel Zhang, Sybil Chen.
     """
 
     def __init__(self, port=ev3.INPUT_1):
@@ -297,7 +297,10 @@ class TouchSensor(low_level_rb.TouchSensor):
 
     def is_pressed(self):
         """ Returns True if the TouchSensor is currently pressed. """
-        return self.get_value() == 1
+        if self.get_value() == 1:
+            return True
+        else:
+            return False
 
     def wait_until_pressed(self):
         """ Waits (doing nothing new) until the touch sensor is pressed. """
@@ -500,9 +503,9 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
     A class for the infrared sensor when it is in the mode in which it
     measures distance to the nearest object that it sees.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-       their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+       their colleagues, the entire team, and Sybil Chen.
     """
-    # TODO: In the above line, put the name of the primary author of this class.
+    # DONE: In the above line, put the name of the primary author of this class.
 
     def __init__(self, ir_sensor_port):
         super().__init__(ir_sensor_port)
@@ -528,7 +531,7 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
         in inches, where about 39.37 inches (which is 100 cm) means no object
         is within its field of vision.
         """
-        inches_per_cm = 2.54
+        inches_per_cm = 1 / 2.54
         return 70 * inches_per_cm * self.get_distance_to_nearest_object() / 100
 
 
@@ -590,9 +593,9 @@ class InfraredAsBeaconButtonSensor(object):
     A class for the infrared sensor when it is in the mode in which it
     measures which (if any) of the Beacon buttons are being pressed.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-    their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+    their colleagues, the entire team, and Sybil Chen.
     """
-    # TODO: In the above line, put the name of the primary author of this class.
+    # DONE: In the above line, put the name of the primary author of this class.
 
     def __init__(self, channel=1):
         self.channel = channel
@@ -644,9 +647,9 @@ class BrickButtonSensor(object):
     """
     A class for the buttons on the Brick.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-    their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+    their colleagues, the entire team, and Sybil Chen.
     """
-    # TODO: In the above line, put the name of the primary author of this class.
+    # DONE: In the above line, put the name of the primary author of this class.
 
     def __init__(self):
         self._underlying_sensor = low_level_rb.BrickButtonSensor()
@@ -695,9 +698,9 @@ class ArmAndClaw(object):
     """
     A class for the arm and its associated claw.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-    their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+    their colleagues, the entire team, and Rachel Zhang.
     """
-    # TODO: In the above line, put the name of the primary author of this class.
+    # DONE: In the above line, put the name of the primary author of this class.
 
     def __init__(self, touch_sensor, port=ev3.OUTPUT_A):
         # The ArmAndClaw's  motor  is not really a Wheel, of course,
@@ -724,8 +727,8 @@ class ArmAndClaw(object):
         self.motor.start_spinning(-100)
 
         while True:
-            wow = self.motor.get_degrees_spun()
-            if wow >= 14.5 * 360:
+            wow = abs(self.motor.get_degrees_spun())
+            if wow >= 14.2 * 360:
                 self.motor.stop_spinning()
                 break
 
@@ -741,10 +744,12 @@ class ArmAndClaw(object):
         Stop when the touch sensor is pressed.
         """
         self.motor.start_spinning(100)
-        self.touch_sensor.wait_until_pressed()
-        self.motor.stop_spinning()
-
+        while True:
+            if self.touch_sensor.is_pressed():
+                self.motor.stop_spinning()
+                break
         # DONE: Do this as STEP 1 of implementing this class.
+
 
     def move_arm_to_position(self, position):
         """
@@ -753,7 +758,7 @@ class ArmAndClaw(object):
         """
         self.motor.start_spinning(100)
         while True:
-            if self.motor.get_degrees_spun() >= position - self.position:
+            if abs(self.motor.get_degrees_spun()) >= position - self.position:
                 self.motor.stop_spinning()
                 break
 
