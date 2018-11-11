@@ -9,17 +9,26 @@ import time
 
 def main():
     """ Runs YOUR specific part of the project """
-    color()
+    test_go_until_color_is(rb.RED)
+    # test_polygon(4)
+    # test_get_away_from_me()
+    # test_the_floor_is_lava()
+
+def test_go_until_color_is(n):
+    lenin = rb.Snatch3rRobot()
+    lenin.color_sensor.go_until_color_is(n)
 
 
-def color():
-    chen = rb.Snatch3rRobot()
+def test_polygon(n):
+    lenin = rb.Snatch3rRobot()
+    lenin.drive_system.polygon(n)
 
-    while True:
-        if chen.color_sensor.get_color() != rb.Color.BLUE.value:
-            chen.drive_system.start_moving()
-        else:
-            chen.drive_system.stop_moving()
-            break
+def test_get_away_from_me():
+    lenin = rb.Snatch3rRobot()
+    lenin.proximity_sensor.get_away_from_me()
+
+def test_the_floor_is_lava():
+    lenin = rb.Snatch3rRobot()
+    lenin.color_sensor.the_floor_is_lava(lenin)
 
 main()

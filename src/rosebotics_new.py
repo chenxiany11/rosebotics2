@@ -132,8 +132,8 @@ class Snatch3rRobot(object):
         self.color_sensor = ColorSensor(color_sensor_port)
         self.camera = Camera(camera_port)
 
-        # self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
-        # self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
+        self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
+        self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
         self.beacon_button_sensor = InfraredAsBeaconButtonSensor(channel=1)
 
         self.brick_button_sensor = BrickButtonSensor()
@@ -284,6 +284,10 @@ class DriveSystem(object):
                     self.stop_moving(stop_action)
                     break
 
+    def polygon(self, n):
+        for k in range(n):
+            self.drive_system.go_straight_inches(10)
+            self.drive_system.spin_in_place_degrees(360 / n)
 
 class TouchSensor(low_level_rb.TouchSensor):
     """
@@ -409,6 +413,19 @@ class ColorSensor(low_level_rb.ColorSensor):
                 if self.get_color() == colors[i]:
                     break
 
+    def go_until_color_is(self, chen, color):
+        chen.drive_system.start_moving(100)
+        self.wait_until_color_is(color)
+        chen.drive_system.stop_moving()
+
+    def the_floor_is_lava(self,chen):
+        chen.drive_system.start_moving(100,100)
+        intensity = self.get_reflected_intensity()
+        while True:
+            if intensity > 50:
+                chen.drive_system.turn_degrees(5,100)
+            intensity = self.get_reflected_intensity()
+
 
 class Camera(object):
     """
@@ -533,6 +550,11 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
         """
         inches_per_cm = 1 / 2.54
         return 70 * inches_per_cm * self.get_distance_to_nearest_object() / 100
+
+    def get_away_from_me(self):
+        if self.get_distance_to_nearest_object_in_inches() > 9:
+            if self.get_distance_to_nearest_object_in_inches() < 15:
+                ev3.Sound.beep()
 
 
 class InfraredAsBeaconSensor(object):
