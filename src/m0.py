@@ -5,7 +5,7 @@
   Fall term, 2018-2019.
 """
 
-import rosebotics_new as rb
+import rosebotics as rb
 import time
 
 
