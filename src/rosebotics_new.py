@@ -221,8 +221,8 @@ class DriveSystem(object):
         while True:
             self.left_wheel.start_spinning(duty_cycle_percent)
             self.right_wheel.start_spinning(duty_cycle_percent)
-            if self.left_wheel.get_degrees_spun() - degrees1 > inches * 89:
-                self.stop_moving(stop_action)
+            if self.left_wheel.get_degrees_spun() - degrees1 > inches * 85:
+                self.stop_moving()
                 break
 
 
@@ -248,8 +248,8 @@ class DriveSystem(object):
         self.right_wheel.start_spinning(duty_cycle_percent)
         self.left_wheel.start_spinning(-1 * duty_cycle_percent)
         while True:
-            if self.right_wheel.get_degrees_spun() >= degrees * 5.5:
-                self.stop_moving(stop_action)
+            if self.right_wheel.get_degrees_spun() >= abs(degrees) * 4.6:
+                self.stop_moving()
                 break
 
     def turn_degrees(self,
@@ -274,21 +274,21 @@ class DriveSystem(object):
         if degrees > 0:
             self.right_wheel.start_spinning(duty_cycle_percent)
             while True:
-                if self.right_wheel.get_degrees_spun() >= degrees * 11:
-                    self.stop_moving(stop_action)
+                if self.right_wheel.get_degrees_spun() >= degrees * 9:
+                    self.stop_moving()
                     break
         if degrees < 0:
             degrees = degrees * -1
             self.left_wheel.start_spinning(duty_cycle_percent)
             while True:
-                if self.left_wheel.get_degrees_spun() >= degrees * 11:
-                    self.stop_moving(stop_action)
+                if self.left_wheel.get_degrees_spun() >= degrees * 9:
+                    self.stop_moving()
                     break
 
     def polygon(self, n):
         for k in range(n):
-            self.drive_system.go_straight_inches(10)
-            self.drive_system.spin_in_place_degrees(360 / n)
+            self.go_straight_inches(10)
+            self.spin_in_place_degrees(360 / n)
 
 class TouchSensor(low_level_rb.TouchSensor):
     """
@@ -748,7 +748,7 @@ class ArmAndClaw(object):
         self.position = 0
         # At the DOWN position, the robot fits in its plastic bin,
         # so we start with the ArmAndClaw in that position.
-        self.calibrate()
+        # self.calibrate()
 
 
     def calibrate(self):
