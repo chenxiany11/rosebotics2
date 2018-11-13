@@ -19,7 +19,7 @@ def main():
     root = tkinter.Tk()
 
     mastermind = com.MqttClient()
-    mastermind.connect_to_pc()
+    mastermind.connect_to_ev3()
     setup_gui(root, mastermind)
 
     root.mainloop()
@@ -40,14 +40,14 @@ def setup_gui(root_window, mqtt_client):
         lambda: handle_go_forward(speed_entry_box, mqtt_client)
 
 
-def handle_go_forward(entry_box, mastermind):
+def handle_go_forward(entry_box, mqtt_client):
     """
     Tells the robot to go forward at the speed specified in the given entry box.
     """
 
     gotta_go_fast = entry_box.get()
     print('Sending the go_forward message with speed', gotta_go_fast)
-    mastermind.send_message('go_forward', [gotta_go_fast])
+    mqtt_client.send_message('go_forward', [gotta_go_fast])
 
 
 

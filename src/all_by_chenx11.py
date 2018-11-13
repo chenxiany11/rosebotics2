@@ -4,14 +4,13 @@
 """
 
 import rosebotics_new as rb
-import random
 import time
 
 
 def main():
     """ Runs YOUR specific part of the project """
     # sprint_1()
-    sprint_2()
+    # sprint_2()
 
 
 def sprint_1():
@@ -35,10 +34,13 @@ def sprint_1():
     chen.drive_system.turn_degrees(-720)   # (line 254)
     print('Test finished!')
 
+    print('Test: Make a pentagon')
+    chen.drive_system.polygon(5)  # (line 288)
+
 def sprint_2():
     chen = rb.Snatch3rRobot()
     print('Test: Make robot beep if someone waves')
-    chen.proximity_sensor.happy_to_see_you()
+    chen.proximity_sensor.happy_to_see_you()  # (line 554)
     print('Test finished!')
 
 main()

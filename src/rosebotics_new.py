@@ -221,8 +221,8 @@ class DriveSystem(object):
         while True:
             self.left_wheel.start_spinning(duty_cycle_percent)
             self.right_wheel.start_spinning(duty_cycle_percent)
-            if self.left_wheel.get_degrees_spun() - degrees1 > inches * 89:
-                self.stop_moving(stop_action)
+            if self.left_wheel.get_degrees_spun() - degrees1 > inches * 85:
+                self.stop_moving()
                 break
 
 
@@ -248,8 +248,8 @@ class DriveSystem(object):
         self.right_wheel.start_spinning(duty_cycle_percent)
         self.left_wheel.start_spinning(-1 * duty_cycle_percent)
         while True:
-            if self.right_wheel.get_degrees_spun() >= degrees * 5.5:
-                self.stop_moving(stop_action)
+            if self.right_wheel.get_degrees_spun() >= abs(degrees) * 4.6:
+                self.stop_moving()
                 break
 
     def turn_degrees(self,
@@ -274,21 +274,21 @@ class DriveSystem(object):
         if degrees > 0:
             self.right_wheel.start_spinning(duty_cycle_percent)
             while True:
-                if self.right_wheel.get_degrees_spun() >= degrees * 11:
-                    self.stop_moving(stop_action)
+                if self.right_wheel.get_degrees_spun() >= degrees * 9:
+                    self.stop_moving()
                     break
         if degrees < 0:
             degrees = degrees * -1
             self.left_wheel.start_spinning(duty_cycle_percent)
             while True:
-                if self.left_wheel.get_degrees_spun() >= degrees * 11:
-                    self.stop_moving(stop_action)
+                if self.left_wheel.get_degrees_spun() >= degrees * 9:
+                    self.stop_moving()
                     break
 
     def polygon(self, n):
         for k in range(n):
-            self.drive_system.go_straight_inches(10)
-            self.drive_system.spin_in_place_degrees(360 / n)
+            self.go_straight_inches(10)
+            self.spin_in_place_degrees(360 / n)
 
 class TouchSensor(low_level_rb.TouchSensor):
     """
@@ -331,7 +331,6 @@ class ColorSensor(low_level_rb.ColorSensor):
 
     def __init__(self, port=ev3.INPUT_3):
         super().__init__(port)
-
 
     def get_color(self):
         """
@@ -414,17 +413,17 @@ class ColorSensor(low_level_rb.ColorSensor):
                 if self.get_color() == colors[i]:
                     break
 
-    def go_until_color_is(self, chen, color):
-        chen.drive_system.start_moving(100)
+    def go_until_color_is(self, stalin, color):
+        stalin.drive_system.start_moving(100)
         self.wait_until_color_is(color)
-        chen.drive_system.stop_moving()
+        stalin.drive_system.stop_moving()
 
-    def the_floor_is_lava(self,chen):
-        chen.drive_system.start_moving(100,100)
+    def the_floor_is_lava(self,stalin):
+        stalin.drive_system.start_moving(100,100)
         intensity = self.get_reflected_intensity()
         while True:
             if intensity > 50:
-                chen.drive_system.turn_degrees(5,100)
+                stalin.drive_system.turn_degrees(5,100)
             intensity = self.get_reflected_intensity()
 
 
@@ -654,14 +653,14 @@ class InfraredAsBeaconButtonSensor(object):
     def get_channel(self):
         return self.channel
 
-    # def get_buttons_pressed(self):
-    #     """
-    #     Returns a list of the numbers corresponding to buttons on the Beacon
-    #     which are currently pressed.
-    #     """
-    #     button_list = self._underlying_ir_sensor.buttons_pressed
-    #     for k in range(len(button_list)):
-    #         button_list[k] = self.button_names[button_list[k]]
+    def get_buttons_pressed(self):
+         """
+         Returns a list of the numbers corresponding to buttons on the Beacon
+         which are currently pressed.
+         """
+         button_list = self._underlying_ir_sensor.buttons_pressed
+         for k in range(len(button_list)):
+             button_list[k] = self.button_names[button_list[k]]
 
     def is_top_red_button_pressed(self):
         return self._underlying_ir_sensor.red_up
@@ -765,9 +764,7 @@ class ArmAndClaw(object):
         while True:
             self.motor.get_degrees_spun()
             if abs(self.motor.get_degrees_spun()) >= 14.2 * 360:
-                print('who did this to you')
                 self.motor.stop_spinning()
-                print('why')
                 break
         self.motor.reset_degrees_spun()
 
@@ -784,9 +781,7 @@ class ArmAndClaw(object):
         self.motor.start_spinning(100)
         while True:
             if self.touch_sensor.is_pressed():
-
                 self.motor.stop_spinning()
-
                 break
         # DONE: Do this as STEP 1 of implementing this class.
 
@@ -796,9 +791,11 @@ class ArmAndClaw(object):
         Spin the arm's motor until it reaches the given position.
         Move at a reasonable speed.
         """
+
         self.motor.start_spinning(100)
+
         while True:
-            if abs(self.motor.get_degrees_spun()) >= position - self.position:
+            if abs(self.motor.get_degrees_spun()) >= position:
                 self.motor.stop_spinning()
                 break
 

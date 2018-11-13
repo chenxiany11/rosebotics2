@@ -18,11 +18,17 @@ import ev3dev.ev3 as ev3
 
 def main():
 
-    stalin = rb.Snatch3rRobot
+    stalin = rb.Snatch3rRobot()
     rc = RemoteControlEtc(stalin)
     mastermind = com.MqttClient(rc)
     mastermind.connect_to_pc()
 
+    while True:
+        if stalin.beacon_button_sensor.is_top_red_button_pressed():
+            ev3.Sound.beep().wait()
+        if stalin.beacon_button_sensor.is_top_blue_button_pressed():
+            ev3.Sound.speak('Hello. How are you?').wait()
+        time.sleep(0.01)  # For the delegate to do its work
 
 
 class RemoteControlEtc(object):
@@ -36,16 +42,9 @@ class RemoteControlEtc(object):
 
     def go_forward(self, gotta_go_fast):
         zoom = int(gotta_go_fast)
-        print('zoom zoom')
+        print('zoom zoom at', zoom)
         self.stalin.drive_system.start_moving(zoom, zoom)
 
-    def salutations(self):
-        while True:
-            if self.stalin.beacon_button_sensor.is_top_red_button_pressed():
-                ev3.Sound.beep().wait()
-            if self.stalin.beacon_button_sensor.is_top_blue_button_pressed():
-                ev3.Sound.speak('Hello. How are you?').wait()
-            time.sleep(0.01)  # For the delegate to do its work
 
 
 
