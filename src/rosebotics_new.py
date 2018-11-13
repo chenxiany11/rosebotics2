@@ -14,6 +14,7 @@ from ev3dev import ev3
 from enum import Enum
 import low_level_rosebotics_new as low_level_rb
 import time
+import random
 
 # ------------------------------------------------------------------------------
 # Global constants.  Reference them as (for example):  rb.BRAKE   rb.GREEN
@@ -551,10 +552,21 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
         inches_per_cm = 1 / 2.54
         return 70 * inches_per_cm * self.get_distance_to_nearest_object() / 100
 
-    def get_away_from_me(self):
-        if self.get_distance_to_nearest_object_in_inches() > 9:
-            if self.get_distance_to_nearest_object_in_inches() < 15:
-                ev3.Sound.beep()
+    def happy_to_see_you(self):
+        greetings = ['Hi!', 'How are you today?', 'Nice to see you!', 'Hope you had a wonderful day.', 'Hello!']
+        count = 0
+        while True:
+            if count < 10:
+                if self.get_distance_to_nearest_object_in_inches() > 9:
+                    if self.get_distance_to_nearest_object_in_inches() < 15:
+                        ev3.Sound.beep()
+                        count = count + 1
+                        print(random.choice(greetings))
+            else:
+                print('That is enough beeping for now.')
+                break
+
+
 
 
 class InfraredAsBeaconSensor(object):
@@ -746,15 +758,16 @@ class ArmAndClaw(object):
         (Hence, 0 means all the way DOWN and 14.2 * 360 means all the way UP).
         """
         self.raise_arm_and_close_claw()
+        self.motor.reset_degrees_spun()
         self.motor.start_spinning(-100)
 
         while True:
-            wow = abs(self.motor.get_degrees_spun())
+            wow = self.motor.get_degrees_spun()
             if wow >= 14.2 * 360:
                 self.motor.stop_spinning()
+                self.motor.reset_degrees_spun()
                 break
 
-        self.position = 0
 
         # DONE: Do this as STEP 2 of implementing this class.
 
