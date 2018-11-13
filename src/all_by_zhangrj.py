@@ -10,7 +10,7 @@ import time
 def main():
     """ Runs YOUR specific part of the project """
     # sprint_1()
-    # sprint_2()
+    sprint_2()
 
 
 def sprint_1():
