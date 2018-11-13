@@ -9,7 +9,7 @@ import time
 
 def main():
     """ Runs YOUR specific part of the project """
-    sprint_1()
+    # sprint_1()
     # sprint_2()
 
 
@@ -40,7 +40,7 @@ def sprint_1():
 def sprint_2():
     chen = rb.Snatch3rRobot()
     print('Test: Make robot beep if someone waves')
-    chen.proximity_sensor.happy_to_see_you()
+    chen.proximity_sensor.happy_to_see_you()  # (line 554)
     print('Test finished!')
 
 main()

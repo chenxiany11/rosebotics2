@@ -332,7 +332,6 @@ class ColorSensor(low_level_rb.ColorSensor):
     def __init__(self, port=ev3.INPUT_3):
         super().__init__(port)
 
-
     def get_color(self):
         """
         Returns its best guess as to the color of the object upon which it is
@@ -414,17 +413,17 @@ class ColorSensor(low_level_rb.ColorSensor):
                 if self.get_color() == colors[i]:
                     break
 
-    def go_until_color_is(self, chen, color):
-        chen.drive_system.start_moving(100)
+    def go_until_color_is(self, stalin, color):
+        stalin.drive_system.start_moving(100)
         self.wait_until_color_is(color)
-        chen.drive_system.stop_moving()
+        stalin.drive_system.stop_moving()
 
-    def the_floor_is_lava(self,chen):
-        chen.drive_system.start_moving(100,100)
+    def the_floor_is_lava(self,stalin):
+        stalin.drive_system.start_moving(100,100)
         intensity = self.get_reflected_intensity()
         while True:
             if intensity > 50:
-                chen.drive_system.turn_degrees(5,100)
+                stalin.drive_system.turn_degrees(5,100)
             intensity = self.get_reflected_intensity()
 
 
@@ -654,14 +653,14 @@ class InfraredAsBeaconButtonSensor(object):
     def get_channel(self):
         return self.channel
 
-    # def get_buttons_pressed(self):
-    #     """
-    #     Returns a list of the numbers corresponding to buttons on the Beacon
-    #     which are currently pressed.
-    #     """
-    #     button_list = self._underlying_ir_sensor.buttons_pressed
-    #     for k in range(len(button_list)):
-    #         button_list[k] = self.button_names[button_list[k]]
+    def get_buttons_pressed(self):
+         """
+         Returns a list of the numbers corresponding to buttons on the Beacon
+         which are currently pressed.
+         """
+         button_list = self._underlying_ir_sensor.buttons_pressed
+         for k in range(len(button_list)):
+             button_list[k] = self.button_names[button_list[k]]
 
     def is_top_red_button_pressed(self):
         return self._underlying_ir_sensor.red_up
@@ -748,7 +747,7 @@ class ArmAndClaw(object):
         self.position = 0
         # At the DOWN position, the robot fits in its plastic bin,
         # so we start with the ArmAndClaw in that position.
-        # self.calibrate()
+        self.calibrate()
 
 
     def calibrate(self):
@@ -765,9 +764,7 @@ class ArmAndClaw(object):
         while True:
             self.motor.get_degrees_spun()
             if abs(self.motor.get_degrees_spun()) >= 14.2 * 360:
-                print('who did this to you')
                 self.motor.stop_spinning()
-                print('why')
                 break
         self.motor.reset_degrees_spun()
 
@@ -784,9 +781,7 @@ class ArmAndClaw(object):
         self.motor.start_spinning(100)
         while True:
             if self.touch_sensor.is_pressed():
-
                 self.motor.stop_spinning()
-
                 break
         # DONE: Do this as STEP 1 of implementing this class.
 
@@ -796,9 +791,11 @@ class ArmAndClaw(object):
         Spin the arm's motor until it reaches the given position.
         Move at a reasonable speed.
         """
+
         self.motor.start_spinning(100)
+
         while True:
-            if abs(self.motor.get_degrees_spun()) >= position - self.position:
+            if abs(self.motor.get_degrees_spun()) >= position:
                 self.motor.stop_spinning()
                 break
 
