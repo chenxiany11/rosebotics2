@@ -785,7 +785,6 @@ class ArmAndClaw(object):
                 break
         # DONE: Do this as STEP 1 of implementing this class.
 
-
     def move_arm_to_position(self, position):
         """
         Spin the arm's motor until it reaches the given position.
@@ -800,3 +799,7 @@ class ArmAndClaw(object):
                 break
 
         # DONE: Do this as STEP 3 of implementing this class.
+
+    def go_back(self):
+        rawr = self.motor.get_degrees_spun()
+        self.motor.start_spinning(-rawr )
