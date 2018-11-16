@@ -244,13 +244,24 @@ class DriveSystem(object):
         # done:   Assume that the conversion is linear with respect to speed.
         # done: Don't forget that the Wheel object's position begins wherever
         # done:   it last was, not necessarily 0.
-        self.right_wheel.reset_degrees_spun()
-        self.right_wheel.start_spinning(duty_cycle_percent)
-        self.left_wheel.start_spinning(-1 * duty_cycle_percent)
+        if degrees != 0:
+            degree = degrees / abs(degrees)
+        else:
+            degree = 0
+        count = self.left_wheel.get_degrees_spun()
         while True:
-            if self.right_wheel.get_degrees_spun() >= abs(degrees) * 4.6:
+            self.left_wheel.start_spinning(degree * duty_cycle_percent)
+            self.right_wheel.start_spinning(-1*degree * duty_cycle_percent)
+            if abs(self.left_wheel.get_degrees_spun() - count) >= abs(degrees) * 5:
                 self.stop_moving()
                 break
+        # self.right_wheel.reset_degrees_spun()
+        # self.right_wheel.start_spinning(duty_cycle_percent)
+        # self.left_wheel.start_spinning(-1 * duty_cycle_percent)
+        # while True:
+        #     if self.right_wheel.get_degrees_spun() >= abs(degrees) * 4.6:
+        #         self.stop_moving()
+        #         break
 
     def turn_degrees(self,
                      degrees,
@@ -548,7 +559,7 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
         in inches, where about 39.37 inches (which is 100 cm) means no object
         is within its field of vision.
         """
-        inches_per_cm = 1 / 2.54
+        inches_per_cm = 2.54
         return 70 * inches_per_cm * self.get_distance_to_nearest_object() / 100
 
     def happy_to_see_you(self):

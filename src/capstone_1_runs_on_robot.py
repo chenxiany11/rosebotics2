@@ -64,6 +64,8 @@ def main():
         # waiting for the message from laptop
         if robot.beacon_button_sensor.is_top_red_button_pressed():
             ev3.Sound.beep().wait()
+        if robot.beacon_button_sensor.is_top_blue_button_pressed():
+            ev3.Sound.speak('Hello. How are you?').wait()
 
 
 class RemoteControlEtc(object):
@@ -79,7 +81,7 @@ class RemoteControlEtc(object):
     def go_forward(self, speed_string):
         speed = int(speed_string)
         print('Robot should start moving')
-        self.robot.drive_system.stop_moving(speed, speed)
+        self.robot.drive_system.start_moving(speed, speed)
 
 
 main()

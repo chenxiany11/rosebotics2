@@ -9,7 +9,7 @@ import time
 
 def main():
     """ Runs YOUR specific part of the project """
-    # sprint_1()
+    sprint_1()
     # sprint_2()
 
 
@@ -20,10 +20,6 @@ def sprint_1():
 
     print('Test: Make robot go forth 10 inches')
     chen.drive_system.go_straight_inches(10)  # (line 203)
-    print('Test finished!')
-
-    print('Test: Make robot go backwards 10 inches')
-    chen.drive_system.go_straight_inches(-10)  # (line 203)
     print('Test finished!')
 
     print('Test: Make robot spin a 360')

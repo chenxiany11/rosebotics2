@@ -66,7 +66,7 @@ def main():
     # --------------------------------------------------------------------------
 
 
-def setup_gui(root_window, mqqt_client):
+def setup_gui(root_window, mqtt_client):
     """ Constructs and sets up widgets on the given window. """
     frame = ttk.Frame(root_window, padding=10)
     frame.grid()
@@ -78,16 +78,16 @@ def setup_gui(root_window, mqqt_client):
     go_forward_button.grid()
 
     go_forward_button['command'] = \
-        lambda: handle_go_forward(speed_entry_box, mqqt_client)
+        lambda: handle_go_forward(speed_entry_box, mqtt_client)
 
 
 def handle_go_forward(entry_box, mqtt_client):
     """
     Tells the robot to go forward at the speed specified in the given entry box.
     """
-    speed = entry_box.get()
-    print("Sending 'go_forward' to the robot with a speed", speed)
-    mqtt_client.send_message('go_forward', [speed])
+    gotta_go_fast = entry_box.get()
+    print('Sending the go_forward message with speed', gotta_go_fast)
+    mqtt_client.send_message('go_forward', [gotta_go_fast])
 
     # --------------------------------------------------------------------------
     # done: 6. This function needs the entry box in which the user enters
